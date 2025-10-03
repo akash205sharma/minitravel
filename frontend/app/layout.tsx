@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
 import AuthNav from "./AuthNav";
-import Link from "next/navigation";
+import Link from "next/link";
 
 
 const geistSans = Geist({
@@ -34,18 +34,18 @@ export default function RootLayout({
         <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">
-              <a href="/" className="hover:text-blue-600 transition-colors flex items-center gap-3">
+              <Link href="/" className="hover:text-blue-600 transition-colors flex items-center gap-3">
                 <span className="text-3xl">✈️</span>
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Mini Travel
                 </span>
-              </a>
+              </Link>
             </h1>
             <nav className="flex gap-8 text-sm font-medium items-center">
-              <a href="/" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
                 <span>🏠</span>
                 Trips
-              </a>
+              </Link>
               <CreateTripIfAuthed />
               <AuthNav />
             </nav>
@@ -62,10 +62,10 @@ export default function RootLayout({
 function CreateTripIfAuthed() {
   if (typeof window !== 'undefined' && localStorage.getItem('token')) {
     return (
-      <a href="/create" className="btn-primary flex items-center gap-2">
+      <Link href="/create" className="btn-primary flex items-center gap-2">
         <span>➕</span>
         Create Trip
-      </a>
+      </Link>
     );
   }
   return null;
