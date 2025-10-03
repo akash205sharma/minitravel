@@ -35,7 +35,7 @@ async function getWeather(city: string) {
 }
 
 export default async function TripPage({params}: {params: Promise<{ id: string }>}) {
-  let {id} = await params;
+  const {id} = await params;
   const trip = await getTrip(id);
   if (!trip) {
     return (

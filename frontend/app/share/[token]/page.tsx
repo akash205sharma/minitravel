@@ -44,7 +44,7 @@ async function getWeather(city: string) {
 
 export default async function PublicSharePage({params}: {params: Promise<{ token: string }>}) {
   // Await params before using
-  let {token} = await params;
+  const {token} = await params;
   const trip = await getTripByToken(token);
 
   if (!trip) {
