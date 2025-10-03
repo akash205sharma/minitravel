@@ -109,7 +109,7 @@ export default function EditTripPage() {
             <span className="text-6xl">❌</span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">Trip Not Found</h2>
-          <p className="text-gray-600 mb-8">The trip you're trying to edit doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-8">The trip you&apos;re trying to edit doesn&apos;t exist or has been removed.</p>
           <Link href="/" className="btn-primary inline-flex items-center gap-2">
             <span>←</span>
             Back to Trips

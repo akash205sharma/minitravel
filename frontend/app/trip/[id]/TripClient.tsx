@@ -200,7 +200,7 @@ export default function TripClient({
                 <span className="text-3xl">⚠️</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Trip</h3>
-              <p className="text-gray-600">Are you sure you want to delete "{trip.name}"? This action cannot be undone.</p>
+              <p className="text-gray-600">Are you sure you want to delete &quot;{trip.name}&quot;? This action cannot be undone.</p>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 btn-secondary" disabled={deleting}>Cancel</button>
