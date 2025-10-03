@@ -46,9 +46,8 @@ interface PublicSharePageProps {
   params: { token: string };
 }
 
-export default async function PublicSharePage(props: PublicSharePageProps) {
+export default async function PublicSharePage({params}: PublicSharePageProps) {
   // Await params before using
-  const { params } = await props;
   const trip = await getTripByToken(params.token);
 
   if (!trip) {
