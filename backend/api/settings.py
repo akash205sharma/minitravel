@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&4q421ol#*#(#qi$at2xa70&q13!gk)i_ip3_jwfqw3m+v2oii
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["minitravel-lac.vercel.app","localhost", "127.0.0.1"]
 
 
 # Application definition
