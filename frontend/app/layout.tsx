@@ -42,6 +42,10 @@ export default function RootLayout({
               </Link>
             </h1>
             <nav className="flex gap-8 text-sm font-medium items-center">
+              <Link href="/create" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
+                <span>➕</span>
+                Create trips
+              </Link>
               <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
                 <span>🏠</span>
                 Trips
