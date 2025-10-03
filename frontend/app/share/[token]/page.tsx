@@ -1,10 +1,9 @@
 import Link from "next/link";
-import dayjs from "dayjs";
-import TripClient from "./TripClient";
+import TripClient from "../../trip/[id]/TripClient";
 
-async function getTrip(id: string) {
+async function getTripByToken(token: string) {
   const base = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
-  const url = `${base}/api/trips/${id}/`;
+  const url = `${base}/api/trips/share/${token}/`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) return null;
   return res.json();
@@ -35,8 +34,8 @@ async function getWeather(city: string) {
   }
 }
 
-export default async function TripPage({ params }: { params: { id: string } }) {
-  const trip = await getTrip(params.id);
+export default async function PublicSharePage({ params }: { params: { token: string } }) {
+  const trip = await getTripByToken(params.token);
   if (!trip) {
     return (
       <div className="text-center py-16">
@@ -45,10 +44,10 @@ export default async function TripPage({ params }: { params: { id: string } }) {
             <span className="text-6xl">❌</span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">Trip Not Found</h2>
-          <p className="text-gray-600 mb-8">The trip you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-8">The shared trip link is invalid or has expired.</p>
           <Link href="/" className="btn-primary inline-flex items-center gap-2">
             <span>←</span>
-            Back to Trips
+            Back to Home
           </Link>
         </div>
       </div>
@@ -60,6 +59,7 @@ export default async function TripPage({ params }: { params: { id: string } }) {
     getWeather(trip.destination_city),
   ]);
 
-  // Render client UI with server-fetched bonus data
-  return <TripClient trip={trip} tripId={params.id} cityImage={cityImage} weather={weather} readOnly={false} />;
+  return <TripClient trip={trip} tripId={String(trip.id)} cityImage={cityImage} weather={weather} readOnly={true} />;
 }
+
+

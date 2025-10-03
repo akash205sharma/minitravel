@@ -1,7 +1,28 @@
 "use client"
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [trips, setTrips] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadTrips() {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_BASE + "/api/trips/", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          setTrips(data);
+        }
+      } catch (error) {
+        console.error("Error loading trips:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTrips();
+  }, []);
+
   return (
     <div className="space-y-12">
       {/* Hero Section */}
@@ -34,19 +55,20 @@ export default function Home() {
         </div>
       </div>
 
-      <TripsList />
+      <TripsList trips={trips} loading={loading} />
     </div>
   );
 }
 
-async function getTrips() {
-  const res = await fetch(process.env.NEXT_PUBLIC_API_BASE + "/api/trips/", { cache: "no-store" });
-  if (!res.ok) return [] as any[];
-  return res.json();
-}
-
-async function TripsList() {
-  const trips = await getTrips();
+function TripsList({ trips, loading }: { trips: any[]; loading: boolean }) {
+  if (loading) {
+    return (
+      <div className="text-center py-16">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading your trips...</p>
+      </div>
+    );
+  }
   
   if (!trips.length) {
     return (
