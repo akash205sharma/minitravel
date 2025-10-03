@@ -12,7 +12,11 @@ async function getTripByToken(token: string) {
 async function getCityImage(city: string) {
   try {
     const res = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(city)}&per_page=1&client_id=${process.env.UNSPLASH_ACCESS_KEY || process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+        city
+      )}&per_page=1&client_id=${
+        process.env.UNSPLASH_ACCESS_KEY || process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+      }`
     );
     if (!res.ok) return null;
     const data = await res.json();
@@ -25,7 +29,11 @@ async function getCityImage(city: string) {
 async function getWeather(city: string) {
   try {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${process.env.OPENWEATHER_API_KEY || process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+        city
+      )}&appid=${
+        process.env.OPENWEATHER_API_KEY || process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
+      }&units=metric`
     );
     if (!res.ok) return null;
     return await res.json();
@@ -34,8 +42,15 @@ async function getWeather(city: string) {
   }
 }
 
-export default async function PublicSharePage({ params }: { params: { token: string } }) {
+interface PublicSharePageProps {
+  params: { token: string };
+}
+
+export default async function PublicSharePage(props: PublicSharePageProps) {
+  // Await params before using
+  const { params } = await props;
   const trip = await getTripByToken(params.token);
+
   if (!trip) {
     return (
       <div className="text-center py-16">
@@ -59,7 +74,14 @@ export default async function PublicSharePage({ params }: { params: { token: str
     getWeather(trip.destination_city),
   ]);
 
-  return <TripClient trip={trip} tripId={String(trip.id)} cityImage={cityImage} weather={weather} readOnly={true} />;
+  return (
+    <TripClient
+      trip={trip}
+      tripId={String(trip.id)}
+      cityImage={cityImage}
+      weather={weather}
+      readOnly={true}
+    />
+  );
 }
-
 
