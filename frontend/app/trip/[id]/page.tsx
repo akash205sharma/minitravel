@@ -34,8 +34,9 @@ async function getWeather(city: string) {
   }
 }
 
-export default async function TripPage({ params }: { params: { id: string } }) {
-  const trip = await getTrip(params.id);
+export default async function TripPage({params}: {params: Promise<{ id: string }>}) {
+  let {id} = await params;
+  const trip = await getTrip(id);
   if (!trip) {
     return (
       <div className="text-center py-16">
@@ -60,5 +61,5 @@ export default async function TripPage({ params }: { params: { id: string } }) {
   ]);
 
   // Render client UI with server-fetched bonus data
-  return <TripClient trip={trip} tripId={params.id} cityImage={cityImage} weather={weather} readOnly={false} />;
+  return <TripClient trip={trip} tripId={id} cityImage={cityImage} weather={weather} readOnly={false} />;
 }

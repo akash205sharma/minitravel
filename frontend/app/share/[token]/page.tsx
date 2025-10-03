@@ -42,13 +42,10 @@ async function getWeather(city: string) {
   }
 }
 
-interface PublicSharePageProps {
-  params: { token: string };
-}
-
-export default async function PublicSharePage({params}: PublicSharePageProps) {
+export default async function PublicSharePage({params}: {params: Promise<{ token: string }>}) {
   // Await params before using
-  const trip = await getTripByToken(params.token);
+  let {token} = await params;
+  const trip = await getTripByToken(token);
 
   if (!trip) {
     return (
