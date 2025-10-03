@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import dynamic from "next/dynamic";
+import AuthNav from "./AuthNav";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,15 +40,13 @@ export default function RootLayout({
                 </span>
               </a>
             </h1>
-            <nav className="flex gap-8 text-sm font-medium">
+            <nav className="flex gap-8 text-sm font-medium items-center">
               <a href="/" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
                 <span>🏠</span>
                 Trips
               </a>
-              <a href="/create" className="btn-primary flex items-center gap-2">
-                <span>➕</span>
-                Create Trip
-              </a>
+              <CreateTripIfAuthed />
+              <AuthNav />
             </nav>
           </div>
         </header>
@@ -55,4 +56,16 @@ export default function RootLayout({
       </body>
     </html>
   );
+}
+
+function CreateTripIfAuthed() {
+  if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+    return (
+      <a href="/create" className="btn-primary flex items-center gap-2">
+        <span>➕</span>
+        Create Trip
+      </a>
+    );
+  }
+  return null;
 }

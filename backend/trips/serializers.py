@@ -12,11 +12,12 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 class TripSerializer(serializers.ModelSerializer):
 	activities = ActivitySerializer(many=True)
+	owner = serializers.ReadOnlyField(source='owner.username')
 
 	class Meta:
 		model = Trip
 		fields = [
-			'id', 'name', 'destination_city', 'start_date', 'end_date', 'activities', 'share_token'
+			'id', 'name', 'destination_city', 'start_date', 'end_date', 'activities', 'share_token', 'owner'
 		]
 
 	def create(self, validated_data):

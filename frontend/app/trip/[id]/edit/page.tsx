@@ -63,10 +63,11 @@ export default function EditTripPage() {
     setError(null);
     setSuccess(false);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/trips/${tripId}/`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
       const res = await fetch(url, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Token ${token}` } : {}) },
         body: JSON.stringify({ 
           name, 
           destination_city: city, 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Trip(models.Model):
@@ -6,6 +7,7 @@ class Trip(models.Model):
 	destination_city = models.CharField(max_length=200)
 	start_date = models.DateField()
 	end_date = models.DateField()
+	owner = models.ForeignKey(User, related_name="trips", on_delete=models.CASCADE, null=True, blank=True)
 	# Bonus: Shareable link
 	share_token = models.CharField(max_length=32, unique=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)

@@ -3,13 +3,15 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Home() {
+
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadTrips() {
       try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_BASE + "/api/trips/", { cache: "no-store" });
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const res = await fetch(process.env.NEXT_PUBLIC_API_BASE + "/api/trips/", { cache: "no-store", headers: { ...(token ? { Authorization: `Token ${token}` } : {}) } });
         if (res.ok) {
           const data = await res.json();
           setTrips(data);
@@ -61,6 +63,8 @@ export default function Home() {
 }
 
 function TripsList({ trips, loading }: { trips: any[]; loading: boolean }) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   if (loading) {
     return (
       <div className="text-center py-16">
@@ -70,6 +74,24 @@ function TripsList({ trips, loading }: { trips: any[]; loading: boolean }) {
     );
   }
   
+  if (!token || token === null) {
+    return (
+      <div className="text-center py-16">
+        <div className="max-w-md mx-auto">
+          <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+            <span className="text-6xl">🗺️</span>
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">Ready for Your First Adventure?</h3>
+          <p className="text-gray-600 mb-8 text-lg">Start planning your perfect trip with detailed itineraries and activities.</p>
+          <Link href="/auth/login" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+            <span>✨</span>
+            Login to Create Your First Trip
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!trips.length) {
     return (
       <div className="text-center py-16">

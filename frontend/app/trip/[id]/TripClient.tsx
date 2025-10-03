@@ -32,8 +32,9 @@ export default function TripClient({
     if (readOnly) return;
     setDeleting(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const base = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
-      const res = await fetch(`${base}/api/trips/${tripId}/`, { method: "DELETE" });
+      const res = await fetch(`${base}/api/trips/${tripId}/`, { method: "DELETE", headers: { ...(token ? { Authorization: `Token ${token}` } : {}) } });
       if (!res.ok) throw new Error("Failed to delete trip");
       router.push("/");
     } catch (error) {
@@ -69,7 +70,7 @@ export default function TripClient({
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                {!readOnly && (
+                {!readOnly && typeof window !== 'undefined' && localStorage.getItem('token') && (
                   <div className="flex gap-3">
                     <Link href={`/trip/${tripId}/edit`} className="btn-primary bg-white/90 hover:bg-white text-gray-900 hover:text-gray-900 flex items-center gap-2">
                       ✏️ Edit Trip
@@ -114,7 +115,7 @@ export default function TripClient({
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Your Itinerary</h2>
           <p className="text-gray-600">Day-by-day breakdown of your adventure</p>
-          {!readOnly && (
+          {!readOnly && typeof window !== 'undefined' && localStorage.getItem('token') && (
             <div className="mt-4">
               <Link href={`/trip/${tripId}/edit`} className="btn-primary inline-flex items-center gap-2">
                 ➕ Add Activities

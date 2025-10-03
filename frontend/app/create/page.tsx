@@ -28,10 +28,11 @@ export default function CreateTripPage() {
     setError(null);
     setSuccess(false);
     const url = process.env.NEXT_PUBLIC_API_BASE + "/api/trips/";
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
       const res = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Token ${token}` } : {}) },
         body: JSON.stringify({ name, destination_city: city, start_date: start, end_date: end, activities }),
       });
       if (!res.ok) throw new Error("Failed to create trip");
