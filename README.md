@@ -256,8 +256,7 @@ This project is licensed under the MIT License.
 
 ## Demo
 
-A live demo is available at: [Your deployed URL]
-
+A live demo is available at: [Your deployed URL](https://drive.google.com/file/d/1SjZTP4BESV7jd7LbgzMUDUduJeiFreSv/view?usp=sharing)
 ## Screenshots
 
 - **Home Page**: Clean trip listing with cards
