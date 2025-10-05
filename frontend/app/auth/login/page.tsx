@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+  // console.log("Redirect to:", redirect);
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +28,11 @@ export default function LoginPage() {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username || username);
+  
+      if(redirect==="/create"){
+        router.push(`${redirect}?from=localstorage`);
+        return;
+      }
       router.push("/");
     } catch (e: any) {
       setError(e.message || "Login failed");
