@@ -4,6 +4,7 @@ import "./globals.css";
 import dynamic from "next/dynamic";
 import AuthNav from "./AuthNav";
 import Link from "next/link";
+import { Suspense } from "react";
 
 
 const geistSans = Geist({
@@ -56,7 +57,9 @@ export default function RootLayout({
           </div>
         </header>
         <main className="max-w-6xl mx-auto px-6 py-10 min-h-screen">
-          {children}
+          <Suspense>
+            {children}
+          </Suspense>
         </main>
       </body>
     </html>
