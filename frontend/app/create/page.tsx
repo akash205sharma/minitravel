@@ -1,11 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import LoginPage from "../auth/login/page";
 
 type Activity = { title: string; time?: string; day_number: number };
 
 export default function CreateTripPage() {
+
+  const searchParams = useSearchParams();
+
+  const [from, setFrom] = useState("");
+  
+  useEffect(() => {
+    setFrom(searchParams.get("from") || "");
+  }, [searchParams]);
+
+  const router = useRouter();
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [start, setStart] = useState("");
@@ -14,6 +26,19 @@ export default function CreateTripPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+
+  if (from === "localstorage" && typeof window !== "undefined") {
+    const data = JSON.parse(localStorage.getItem("datatocreate")!);
+    if (data) {
+      setName(data.name || "");
+      setCity(data.destination_city || "");
+      setStart(data.start_date || "");
+      setEnd(data.end_date || "");
+      setActivities(data.activities || []);
+    }
+    localStorage.removeItem("datatocreate");
+  }
 
   function addActivity() {
     setActivities((a) => [...a, { title: "", day_number: 1 }]);
@@ -29,20 +54,25 @@ export default function CreateTripPage() {
     setSuccess(false);
     const url = process.env.NEXT_PUBLIC_API_BASE + "/api/trips/";
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Token ${token}` } : {}) },
-        body: JSON.stringify({ name, destination_city: city, start_date: start, end_date: end, activities }),
-      });
-      if (!res.ok) throw new Error("Failed to create trip");
-      const trip = await res.json();
-      setSuccess(true);
-      setTimeout(() => (window.location.href = "/trip/" + trip.id), 1500);
-    } catch (e: any) {
-      setError(e.message || "Failed to create trip");
-    } finally {
-      setSaving(false);
+    if (token) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Token ${token}` },
+          body: JSON.stringify({ name, destination_city: city, start_date: start, end_date: end, activities }),
+        });
+        if (!res.ok) throw new Error("Failed to create trip");
+        const trip = await res.json();
+        setSuccess(true);
+        setTimeout(() => (window.location.href = "/trip/" + trip.id), 1500);
+      } catch (e: any) {
+        setError(e.message || "Failed to create trip");
+      } finally {
+        setSaving(false);
+      }
+    } else {
+      localStorage.setItem("datatocreate", JSON.stringify({ name, destination_city: city, start_date: start, end_date: end, activities }));
+      router.push(`/auth/login?redirect=/create`)
     }
   }
 

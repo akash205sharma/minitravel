@@ -128,7 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    "https://minitravel-lac.vercel.app",
+    "https://minitravel-lac.vercel.app","http://localhost:3000"
 ]
 CORS_ALLOW_HEADERS = [
     "content-type",
