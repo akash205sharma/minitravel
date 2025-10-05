@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import LoginPage from "../auth/login/page";
@@ -10,7 +10,12 @@ type Activity = { title: string; time?: string; day_number: number };
 export default function CreateTripPage() {
 
   const searchParams = useSearchParams();
-  const from = searchParams.get("from");
+
+  const [from, setFrom] = useState("");
+  
+  useEffect(() => {
+    setFrom(searchParams.get("from") || "");
+  }, [searchParams]);
 
   const router = useRouter();
   const [name, setName] = useState("");

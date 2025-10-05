@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+ const searchParams = useSearchParams();
+  const [redirect, setRedirect] = useState("");
 
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
-  // console.log("Redirect to:", redirect);
+  useEffect(() => {
+    setRedirect(searchParams.get("redirect") || "");
+  }, [searchParams]);
+  
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
